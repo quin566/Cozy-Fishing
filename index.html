@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="description" content="Morning Koi, a peaceful mobile-first pixel-art idle fishing game." />
+  <title>Morning Koi Polished</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="hero glass">
+      <div class="hero-copy">
+        <p class="eyebrow">cozy idle fishing</p>
+        <h1>Morning Koi</h1>
+        <p class="hero-text">A peaceful mobile web fishing game where a Japanese-inspired koi garden meets a quiet lakeside cabin morning. Tap when you want to play, or leave it running like a living screensaver.</p>
+      </div>
+      <div class="hero-actions">
+        <button class="pill" id="soundToggle" type="button" aria-pressed="false">Sound Off</button>
+        <button class="pill" id="zenToggle" type="button" aria-pressed="false">Zen Mode</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="scene-card glass" aria-label="Fishing pond scene">
+        <div class="scene-wrap" id="sceneWrap">
+          <img class="scene-base" src="assets/environment/pond-scene.svg" alt="Pixel-art koi pond with cabin and bridge" />
+          <div class="sky-overlay morning" id="skyOverlay"></div>
+          <div class="weather-overlay clear" id="weatherOverlay"></div>
+          <div class="water-glow"></div>
+          <div class="water-grid"></div>
+
+          <div class="scene-overlay overlay-left glass-soft">
+            <span class="overlay-strong" id="timeMood">Dawn Calm</span>
+            <span id="weatherMood">Still Water</span>
+          </div>
+
+          <div class="scene-overlay overlay-right glass-soft resources">
+            <span>Coins <strong id="coinsValue">0</strong></span>
+            <span>Koi lore <strong id="loreValue">0</strong></span>
+          </div>
+
+          <div class="fish-layer" id="fishLayer" aria-hidden="true"></div>
+          <div class="lily-layer" aria-hidden="true">
+            <span class="lily l1"></span>
+            <span class="lily l2"></span>
+            <span class="lily l3"></span>
+            <span class="lily l4"></span>
+            <span class="lily l5"></span>
+          </div>
+          <div class="reeds-layer" aria-hidden="true">
+            <span class="reed r1"></span>
+            <span class="reed r2"></span>
+            <span class="reed r3"></span>
+            <span class="reed r4"></span>
+            <span class="reed r5"></span>
+            <span class="reed r6"></span>
+          </div>
+          <div class="ripple-layer" id="rippleLayer" aria-hidden="true"></div>
+          <div class="sparkle-layer" id="sparkleLayer" aria-hidden="true"></div>
+
+          <div class="cast-anchor" aria-hidden="true"></div>
+          <div class="bobber-wrap hidden" id="bobberWrap" aria-hidden="true">
+            <div class="fishing-line" id="fishingLine"></div>
+            <button class="bobber" id="bobberButton" type="button" aria-label="Reel in fish"></button>
+          </div>
+
+          <div class="bite-alert hidden" id="biteAlert">Bite!</div>
+
+          <div class="catch-burst hidden" id="catchBurst">
+            <div class="catch-ring"></div>
+            <div class="catch-glow"></div>
+            <div class="catch-stars">
+              <span style="--tx:-52px;--ty:-30px;left:50%;top:50%"></span>
+              <span style="--tx:56px;--ty:-38px;left:50%;top:50%"></span>
+              <span style="--tx:-40px;--ty:44px;left:50%;top:50%"></span>
+              <span style="--tx:48px;--ty:50px;left:50%;top:50%"></span>
+              <span style="--tx:0px;--ty:-64px;left:50%;top:50%"></span>
+            </div>
+          </div>
+
+          <div class="last-catch glass-soft hidden" id="lastCatchCard">
+            <div class="last-catch-icon" id="lastCatchIcon"></div>
+            <div>
+              <p>Last catch</p>
+              <strong id="lastCatchName">Sunlit Koi</strong>
+            </div>
+          </div>
+
+          <button class="scene-tap-layer" id="sceneTap" type="button" aria-label="Tap pond to cast line"></button>
+
+          <div class="scene-prompt glass-soft" id="scenePrompt">Tap the pond or press Cast Line to drift your float into the water.</div>
+        </div>
+      </section>
+
+      <section class="actions-row glass panel">
+        <button class="primary-btn" id="castButton" type="button">Cast Line</button>
+        <button class="secondary-btn" id="reelButton" type="button" disabled>Reel In</button>
+      </section>
+
+      <section class="glass panel progress-panel">
+        <div class="panel-head">
+          <h2>Fishing Flow</h2>
+          <span class="panel-state" id="flowState">Ready</span>
+        </div>
+        <div class="meter"><div class="meter-fill" id="biteMeter"></div></div>
+        <p class="helper" id="flowHint">Use a gentle pace. Nothing here should feel rushed.</p>
+      </section>
+
+      <section class="glass panel tabs-panel">
+        <div class="tab-row" role="tablist" aria-label="Morning Koi panels">
+          <button class="tab-btn active" type="button" data-tab="journal" role="tab" aria-selected="true">Journal</button>
+          <button class="tab-btn" type="button" data-tab="tackle" role="tab" aria-selected="false">Tackle</button>
+          <button class="tab-btn" type="button" data-tab="collection" role="tab" aria-selected="false">Collection</button>
+        </div>
+
+        <div class="tab-panel active" id="journalPanel" role="tabpanel">
+          <div class="stats-grid">
+            <article><span>Total casts</span><strong id="castsValue">0</strong></article>
+            <article><span>Fish caught</span><strong id="catchesValue">0</strong></article>
+            <article><span>Rarest catch</span><strong id="rarestValue">None</strong></article>
+            <article><span>Best streak</span><strong id="streakValue">0</strong></article>
+          </div>
+          <div class="journal-list" id="journalList"></div>
+        </div>
+
+        <div class="tab-panel" id="tacklePanel" role="tabpanel" hidden>
+          <div class="tackle-group">
+            <div class="panel-head compact">
+              <h3>Bait Jar</h3>
+              <span class="helper">Tiny choices, soft nudges.</span>
+            </div>
+            <div class="chip-grid" id="baitGrid"></div>
+          </div>
+          <div class="tackle-group spaced">
+            <div class="panel-head compact">
+              <h3>Line &amp; Float</h3>
+              <span class="helper">Quiet upgrades for calmer catches.</span>
+            </div>
+            <div class="chip-grid" id="gearGrid"></div>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="collectionPanel" role="tabpanel" hidden>
+          <div class="collection-summary">Species discovered <strong id="speciesCount">0 / 8</strong></div>
+          <div class="collection-list" id="collectionList"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
